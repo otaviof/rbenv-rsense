@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+#
+# Summary: Check RSENSE_HOME enviroment variable
+#
+# Usage: rbenv rsense
+#
+# Checks enviroment variable RSENSE_HOME if is exported and points to
+# a existing directory.
+
+set -e
+[ -n "$RBENV_DEBUG" ] && set -x
+[ -z "$RBENV_PLUGIN_NAME" ] && RBENV_PLUGIN_NAME="rsense"
+RBENV_PLUGIN_ROOT="${RBENV_ROOT}/plugins/rbenv-${RBENV_PLUGIN_NAME}"
+
+#### Functions ######################################################
+#
+
+function check_rsense_home () {
+    if [ ! -d "${RSENSE_HOME}" ]; then
+        echo "RSENSE_HOME (${RSENSE_HOME}) is not a directory" >&2
+        exit 1
+    fi
+
+    if [ ! -d "${RSENSE_HOME}/bin" ]; then
+        echo "Can't find 'bin' dir on RSENSE_HOME ('${RSENSE_HOME}/bin')" >&2
+        exit 1
+    fi
+
+    if [ ! -d "${RSENSE_HOME}/libexec" ]; then
+        echo "Can't find 'libexec' dir on RSENSE_HOME ('${RSENSE_HOME}/libexec')" >&2
+        exit 1
+    fi
+
+    echo "RSENSE_HOME is set to '${RSENSE_HOME}'"
+}
+
+function sub_command_path() {
+    local sub_command=$1
+    echo "${RBENV_PLUGIN_ROOT}/bin/rbenv-${RBENV_PLUGIN_NAME}-${sub_command}"
+}
+
+#### Command Line Arguments #########################################
+# Parsing pre-defined arguments and offering completion
+#
+
+if [ "$1" = "--complete" ]; then
+    echo "config"
+    exit
+fi
+
+if [ "x$1" = "x" ]; then
+    cat << EOM && exit
+Available $RBENV_PLUGIN_NAME commands:
+    * config
+EOM
+fi
+
+#### Main: Sub-Command Dispatch #####################################
+# Checking for RSene home directory and dispatching sub-command
+#
+
+if [ -z "$RSENSE_HOME" ]; then
+    cat << EOM >&2
+  Error:
+    RSENSE_HOME is not set, please export this variable pointing to
+    RSense install directory, for instance:
+
+    $ export RSENSE_HOME="/usr/local/Cellar/rsense/0.3"
+EOM
+else
+    #
+    # TODO
+    #  * Include feature to help on export this enviroment variable or
+    #    just point to another plugin to control environment variables
+    #
+    check_rsense_home
+    sub_command_name="$(sub_command_path $1)"
+
+    if [ ! -f ${sub_command_name} ]; then
+        echo "Can't find sub-command: ${sub_command_name}" >&2
+        exit
+    fi
+
+    exec "${sub_command_name}" "$@"
+fi
+
+# EOF
