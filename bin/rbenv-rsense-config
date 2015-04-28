@@ -33,7 +33,8 @@ EOM
         exit
     else
         if ( ruby ${RSENSE_HOME}/libexec/etc/config.rb > ~/.rsense ); then
-            echo "New RSense configuration is set using '$(ruby --version)'"
+            [ -n "$RBENV_DEBUG" ] && \
+                echo "New RSense configuration is set using '$(ruby --version)'"
         else
             echo "Error setting RSense configuration" >&2
             exit 1

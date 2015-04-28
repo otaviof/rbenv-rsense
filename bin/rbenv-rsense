@@ -10,7 +10,9 @@
 set -e
 [ -n "$RBENV_DEBUG" ] && set -x
 [ -z "$RBENV_PLUGIN_NAME" ] && RBENV_PLUGIN_NAME="rsense"
+
 RBENV_PLUGIN_ROOT="${RBENV_ROOT}/plugins/rbenv-${RBENV_PLUGIN_NAME}"
+
 
 #### Functions ######################################################
 #
@@ -39,26 +41,6 @@ function sub_command_path() {
     echo "${RBENV_PLUGIN_ROOT}/bin/rbenv-${RBENV_PLUGIN_NAME}-${sub_command}"
 }
 
-#### Command Line Arguments #########################################
-# Parsing pre-defined arguments and offering completion
-#
-
-if [ "$1" = "--complete" ]; then
-    echo "config"
-    exit
-fi
-
-if [ "x$1" = "x" ]; then
-    cat << EOM && exit
-Available $RBENV_PLUGIN_NAME commands:
-    * config
-EOM
-fi
-
-#### Main: Sub-Command Dispatch #####################################
-# Checking for RSene home directory and dispatching sub-command
-#
-
 if [ -z "$RSENSE_HOME" ]; then
     cat << EOM >&2
   Error:
@@ -67,7 +49,28 @@ if [ -z "$RSENSE_HOME" ]; then
 
     $ export RSENSE_HOME="/usr/local/Cellar/rsense/0.3"
 EOM
-else
+fi
+
+if [ -z "$RBENV_PLUGIN_SOURCE" ]; then
+    #### Command Line Arguments ######################################
+    # Parsing pre-defined arguments and offering rbenv plugin
+    # completion standards
+    #
+
+    if [ "$1" = "--complete" ]; then
+        echo "config"
+        exit
+    fi
+
+    if [ "x$1" = "x" ] ; then
+    cat << EOM && exit
+Available $RBENV_PLUGIN_NAME commands:
+    * config
+EOM
+    fi
+
+    #### Main: Sub-Command Dispatch #####################################
+    # Checking for RSene home directory and dispatching sub-command
     #
     # TODO
     #  * Include feature to help on export this enviroment variable or
