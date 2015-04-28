@@ -24,15 +24,14 @@ fi
 function exec_rsense_config () {
     command="ruby ${RSENSE_HOME}/libexec/etc/config.rb > ~/.rsense"
     if [ $DRY_RUN -eq 1 ]; then
-        cat << EOM
+        cat << EOM && exit
 Dry-run:
     $ # $(type ruby)
     $ # $(ruby --version)
     $ ${command}
 EOM
-        exit
     else
-        if ( ruby ${RSENSE_HOME}/libexec/etc/config.rb > ~/.rsense ); then
+        if ( eval $command ); then
             [ -n "$RBENV_DEBUG" ] && \
                 echo "New RSense configuration is set using '$(ruby --version)'"
         else

@@ -32,9 +32,6 @@ function check_rsense_home () {
         echo "Can't find 'libexec' dir on RSENSE_HOME ('${RSENSE_HOME}/libexec')" >&2
         exit 1
     fi
-
-    [ -n "$RBENV_DEBUG" ] && \
-        echo "RSENSE_HOME is set to '${RSENSE_HOME}'"
 }
 
 function sub_command_path () {
@@ -77,7 +74,6 @@ EOM
     #  * Include feature to help on export this enviroment variable or
     #    just point to another plugin to control environment variables
     #
-    check_rsense_home
     sub_command_name="$(sub_command_path $1)"
 
     if [ ! -f ${sub_command_name} ]; then
@@ -85,6 +81,7 @@ EOM
         exit
     fi
 
+    check_rsense_home
     exec "${sub_command_name}" "$@"
 fi
 
