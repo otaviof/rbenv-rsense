@@ -12,6 +12,6 @@ RBENV_PLUGIN_SOURCE=1
 . "${RBENV_PLUGIN_ROOT}/bin/rbenv-${RBENV_PLUGIN_NAME}"
 . "${RBENV_PLUGIN_ROOT}/bin/rbenv-${RBENV_PLUGIN_NAME}-config"
 
-check_rsense_home "config"
+check_rsense_home
 
 # EOF

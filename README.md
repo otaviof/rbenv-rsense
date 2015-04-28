@@ -45,7 +45,7 @@ Available rsense commands:
 
 Calling it, or just using default rbenv completion:
 
-```    
+```
 $ rbenv rsense config
 RSENSE_HOME is set to '/usr/local/Cellar/rsense/0.3'
 ```

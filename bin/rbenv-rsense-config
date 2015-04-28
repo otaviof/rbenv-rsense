@@ -33,7 +33,7 @@ EOM
     else
         if ( eval $command ); then
             [ -n "$RBENV_DEBUG" ] && \
-                echo "New RSense configuration is set using '$(ruby --version)'"
+                echo "New RSense configuration is set using '$(ruby --version)'" >&2
         else
             echo "Error setting RSense configuration" >&2
             exit 1
