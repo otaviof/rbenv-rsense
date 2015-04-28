@@ -33,10 +33,11 @@ function check_rsense_home () {
         exit 1
     fi
 
-    echo "RSENSE_HOME is set to '${RSENSE_HOME}'"
+    [ -n "$RBENV_DEBUG" ] && \
+        echo "RSENSE_HOME is set to '${RSENSE_HOME}'"
 }
 
-function sub_command_path() {
+function sub_command_path () {
     local sub_command=$1
     echo "${RBENV_PLUGIN_ROOT}/bin/rbenv-${RBENV_PLUGIN_NAME}-${sub_command}"
 }
